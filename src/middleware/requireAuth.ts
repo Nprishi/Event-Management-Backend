@@ -30,12 +30,21 @@ export function requireAuth(
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
-      userId: string;
-      email: string;
-    };
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string,
+    ) as jwt.JwtPayload;
 
-    req.user = decoded;
+    if (!decoded.userId) {
+      return res.status(401).json({
+        message: "Invalid token payload",
+      });
+    }
+
+    req.user = {
+      userId: decoded.userId as string,
+      email: decoded.email as string,
+    };
 
     next();
   } catch (error) {

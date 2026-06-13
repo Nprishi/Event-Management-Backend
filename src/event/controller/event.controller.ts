@@ -7,7 +7,6 @@ import {
   deleteEvent,
 } from "../service/event.service";
 
-// Extend Request type for auth user
 interface AuthRequest extends Request {
   user?: {
     userId: string;
@@ -41,6 +40,13 @@ export async function getEventByIdHandler(req: Request, res: Response) {
     if (!event) {
       return res.status(404).json({
         message: "Event not found",
+      });
+    }
+
+    // IMPORTANT (assignment rule)
+    if (event.status === "draft") {
+      return res.status(403).json({
+        message: "Event not published yet",
       });
     }
 
