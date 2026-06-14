@@ -3,13 +3,14 @@ import cors from "cors";
 import morgan from "morgan";
 import { authRouter } from "./auth/routes/auth.routes";
 import { eventRouter } from "./event/routes/event.routes";
+import fs from "fs";
+import path from "path";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-
 
 // Health route
 app.get("/health", (req, res) => {
@@ -19,7 +20,14 @@ app.get("/health", (req, res) => {
   });
 });
 
+const uploadDir = path.join(process.cwd(), "uploads");
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 app.use("/auth", authRouter);
 app.use("/events", eventRouter);
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 export default app;
