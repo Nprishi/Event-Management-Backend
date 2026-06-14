@@ -4,6 +4,7 @@ import {
   setCachedEvents,
   clearEventsCache,
 } from "../../cache/cache.service";
+import { addPublishEventJob } from "../../queues/event.queue";
 
 export async function createEvent(data: any, userId: string) {
   const event = await Event.create({
@@ -44,7 +45,9 @@ export async function getEventById(id: string) {
 export async function updateEvent(id: string, data: any) {
   const event = await Event.findByIdAndUpdate(id, data, { new: true });
 
-  await clearEventsCache();
+  if (event?.status === "published") {
+    await addPublishEventJob(event.id);
+  }
 
   return event;
 }
