@@ -200,7 +200,7 @@ Output saved in /exports/
 Action	                     Result
 GET /events	                 Cache MISS (first time)
 GET /events	                 Cache HIT (next time)
-Create/Update/Delete	     Cache cleared
+Create/Update/Delete	       Cache cleared
 
 
 # Example Test Flow
@@ -212,6 +212,15 @@ Create/Update/Delete	     Cache cleared
 # 4. Get events (MISS)
 # 5. Get events (HIT)
 # 6. Update event → cache cleared
+```
+
+# Multer Configuration 
+
+Banner Image uploaded (Need to install Multer)
+
+```bash
+npm install multer
+npm install -D @types/multer
 ```
 
 # Author
